@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{% url 'dashboard' %}" class="back-link me-3">
+        <i class="fas fa-arrow-left me-1"></i> Back
+    </a>
+    <h3 class="mb-0">Admin Dashboard</h3>
+    <div class="ms-auto d-flex align-items-center">
+        <span class="me-2">Admin • {{ user.username }}</span>
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+            <i class="fas fa-user"></i>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h4 class="mb-1">Project Management</h4>
+                <p class="text-muted mb-0">Monitor and manage all tasks across your organization</p>
+            </div>
+            <a href="{% url 'create_ticket' %}" class="btn create-btn">
+                <i class="fas fa-plus me-2"></i> Create New Ticket
+            </a>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-icon open-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stats-label text-muted">Open</div>
+                    <div class="stats-value fw-bold mt-1">{{ open_count }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-icon progress-icon">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                    <div class="stats-label text-muted">In Progress</div>
+                    <div class="stats-value fw-bold mt-1">{{ in_progress_count }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-icon resolved-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stats-label text-muted">Resolved</div>
+                    <div class="stats-value fw-bold mt-1">{{ resolved_count }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-icon closed-icon">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <div class="stats-label text-muted">Closed</div>
+                    <div class="stats-value fw-bold mt-1">{{ closed_count }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="input-group" style="max-width: 400px;">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0 search-box" placeholder="Search tickets by title, description or ticket number...">
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="statusFilter" data-bs-toggle="dropdown">
+                    All Statuses
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">All Statuses</a></li>
+                    <li><a class="dropdown-item" href="#">Open</a></li>
+                    <li><a class="dropdown-item" href="#">In Progress</a></li>
+                    <li><a class="dropdown-item" href="#">Resolved</a></li>
+                    <li><a class="dropdown-item" href="#">Closed</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        {% if tickets %}
+            {% for ticket in tickets %}
+                <div class="ticket-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="ticket-title">{{ ticket.title }}</h6>
+                            <p class="ticket-description text-muted mb-2">{{ ticket.description }}</p>
+                            <div class="ticket-meta">
+                                Created less than a minute ago • {{ ticket.ticket_number }}
+                            </div>
+                            <div>
+                                <span class="text-muted">Assigned: 
+                                    {% if ticket.assigned_to %}
+                                        {{ ticket.assigned_to.username }}
+                                    {% else %}
+                                        Unassigned
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end">
+                            <span class="status-badge status-{% if ticket.status == 'open' %}open{% elif ticket.status == 'in_progress' %}progress{% elif ticket.status == 'on_hold' %}hold{% elif ticket.status == 'resolved' %}resolved{% else %}closed{% endif %} mb-3">
+                                {{ ticket.get_status_display }}
+                            </span>
+                            
+                            {% if ticket.status != 'closed' %}
+                                <a href="{% url 'update_ticket_status' ticket.id 'closed' %}" class="btn btn-sm btn-outline-secondary action-btn">
+                                    <i class="fas fa-times me-1"></i> Close Task
+                                </a>
+                            {% else %}
+                                <a href="{% url 'update_ticket_status' ticket.id 'open' %}" class="btn btn-sm btn-outline-primary action-btn">
+                                    <i class="fas fa-redo me-1"></i> Reopen Task
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5">
+                <img src="https://via.placeholder.com/120" alt="No tickets" class="mb-3" style="opacity: 0.5;">
+                <h5>No tickets found</h5>
+                <p class="text-muted">Get started by creating your first ticket</p>
+                <a href="{% url 'create_ticket' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Create Your First Ticket
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

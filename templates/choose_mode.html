@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Select Your Workspace</title>
+    <link rel="stylesheet" href="{% static 'css/choose_mode.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>Select Your Workspace</h2>
+            <div class="user-info">
+                <span>{{ user.first_name }} • {{ user.last_name }}</span>
+                <a href="{% url 'logout' %}">🔓</a>
+            </div>
+        </header>
+
+        <main>
+            <h3>Welcome back, {{ user.first_name }}! Where would you like to work today?</h3>
+            <div class="workspace-options">
+                <div class="workspace personal">
+                    <h4>👤 Personal</h4>
+                    <p>Manage your personal tasks and projects</p>
+                    <p>Create and track your individual tasks, set priorities and stay organized.</p>
+                    <a href="#" class="btn personal-btn">Open Personal Tasks</a>
+                </div>
+                <div class="workspace professional">
+                    <h4>💼 Professional</h4>
+                    <p>Collaborate on work projects with your team</p>
+                    <p>Create tickets, assign tasks to team members and track progress together.</p>
+                    <a href="{% url 'choose-role' %}" class="btn professional-btn">Open Professional Workspace</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

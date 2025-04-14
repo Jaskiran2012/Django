@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Select Your Role</title>
+    <link rel="stylesheet" href="{% static 'css/choose_role.css' %}">
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'choose_mode' %}" class="back">&larr; Back</a>
+        <h1>Professional Workspace</h1>
+        <div class="user-profile">
+            <span>{{ request.user.username }} • Admin</span>
+            <a href="{% url 'logout' %}">&#x1f464;</a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <h2>Select Your Role</h2>
+        <div class="role-cards">
+            <form method="POST">
+            {% csrf_token %}
+            {% if request.user.profile.is_admin %}
+            <div class="role-card">
+                <h3>🛡️ Administrator</h3>
+                <p>Manage projects, create tickets and assign tasks to team</p>
+                <p>Create and manage tickets, assign tasks to team members, and monitor project progress.</p>
+                <button type="submit" name="role" value="admin" class="btn">Continue as Administrator</button>
+                
+            </div>
+            {% endif %}
+
+            <div class="role-card">
+                <h3>👤 Team Member</h3>
+                <p>View and manage tasks assigned to you</p>
+                <p>View your assigned tasks, update task status, and collaborate with your team.</p>
+                <button type="submit" name="role" value="team" class="btn">Continue as Team Member</button>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

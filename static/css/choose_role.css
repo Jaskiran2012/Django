@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9fb;
+    color: #333;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff;
+}
+
+.header .back {
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+}
+
+.user-profile {
+    font-size: 14px;
+}
+
+.main-container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.main-container h2 {
+    font-size: 28px;
+    margin-bottom: 40px;
+}
+
+.role-cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.role-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 30px;
+    width: 320px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.role-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.role-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.role-card .btn {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.role-card .btn:hover {
+    background-color: #1e40af;
+}

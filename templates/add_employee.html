@@ -2,29 +2,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Fixed viewport meta tag -->
+    <meta charset="UTF-8"> <!-- Fixed charset meta tag -->
     <title>Add New Employee</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .errorlist {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        button {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1e40af;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold text-center text-blue-700 mb-6">Add New Employee</h2>
-        
-        <form method="POST" class="space-y-4">
+<body>
+    <div class="form-container">
+        <h2>Add New Employee</h2>
+        <form method="POST">
             {% csrf_token %}
             {% for field in form %}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label_tag }}</label>
+                    <label>{{ field.label_tag }}</label>
                     {{ field }}
                     {% if field.errors %}
-                        <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+                        <div class="errorlist">{{ field.errors.0 }}</div>
                     {% endif %}
                 </div>
             {% endfor %}
-
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
-                Add Employee
-            </button>
+            <button type="submit">Add Employee</button>
         </form>
     </div>
 </body>

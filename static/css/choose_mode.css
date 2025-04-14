@@ -1,0 +1,88 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f9f9fb;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 40px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.user-info {
+    font-size: 14px;
+}
+
+main h3 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.workspace-options {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.workspace {
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    padding: 30px;
+    width: 300px;
+    background-color: #fff;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.workspace h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.workspace.personal {
+    border-color: #a855f7;
+}
+
+.workspace.professional {
+    border-color: #3b82f6;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid;
+    transition: all 0.2s ease-in-out;
+}
+
+.personal-btn {
+    color: #a855f7;
+    border-color: #a855f7;
+}
+
+.professional-btn {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.personal-btn:hover {
+    background: #a855f7;
+    color: white;
+}
+
+.professional-btn:hover {
+    background: #3b82f6;
+    color: white;
+}
