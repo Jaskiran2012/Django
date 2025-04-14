@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Ticket Management System</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="login-form">
+                <h1>Login</h1>
+                
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-group">
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Your username and password didn't match. Please try again.
+                    </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="login-btn">LOGIN</button>
+                    
+                    <!-- Sign Up link at the bottom as requested -->
+                    <div class="signup-link">
+                        <p>Don't have an account yet? <a href="{% url 'signup' %}">Sign Up</a></p>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="login-image">
+                <img src="{% static 'images/login page image.jpg' %}" alt="Login Illustration">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
