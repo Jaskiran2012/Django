@@ -21,6 +21,13 @@ urlpatterns = [
     # Ticket management
     path('create-ticket/', views.create_ticket, name='create_ticket'),
     path('ticket/<int:ticket_id>/status/<str:new_status>/', views.update_ticket_status, name='update_ticket_status'),
+
+
+    path('personal-dashboard/', views.personal_dashboard, name='personal_dashboard'),
+    path('api/todos/', views.get_todos, name='get_todos'),
+    path('api/todos/add/', views.add_todo, name='add_todo'),
+    path('api/todos/update/<int:todo_id>/', views.update_todo, name='update_todo'),
+    path('api/todos/delete/<int:todo_id>/', views.delete_todo, name='delete_todo'),
 ]
 
 

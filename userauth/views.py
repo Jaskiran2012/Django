@@ -19,9 +19,9 @@ def signup_view(request):
             user.profile.save()
             login(request, user)
             if user.profile.is_admin:
-                return redirect('add_employee')#start onboarding
+                return redirect('add_employee')
             else:
-                return redirect('employee_dashboard')
+                return redirect('choose-mode')  # Send non-admin users to choose-mode
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -30,14 +30,15 @@ def add_employee_view(request):
     if not request.user.profile.is_admin:
         messages.error(request, "Only admins can add employees.")
         return redirect('employee_dashboard')
+    
     if request.method == 'POST':
         form = EmployeeCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.profile.is_admin = False  # Ensure employee is not admin
+            user.profile.is_admin = False
             user.profile.save()
             messages.success(request, f"Employee {user.username} created successfully.")
-            return redirect('admin_dashboard')
+            return redirect('choose-mode')  # Go to choose-mode after adding employee
     else:
         form = EmployeeCreationForm()
     return render(request, 'add_employee.html', {'form': form})
@@ -154,7 +155,109 @@ def update_ticket_status(request, ticket_id, new_status):
         
         return redirect('employee_dashboard')
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.dateparse import parse_datetime
+import json
+from .models import TodoItem
 
+@login_required
+def personal_dashboard(request):
+    # Get the user's todo items to display initially
+    todos = TodoItem.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'personal_dashboard.html', {'todos': todos})
+
+@login_required
+def get_todos(request):
+    todos = TodoItem.objects.filter(user=request.user).order_by('-created_at')
+    todos_list = []
+    
+    for todo in todos:
+        todos_list.append({
+            'id': todo.id,
+            'title': todo.title,
+            'description': todo.description or '',
+            'createdAt': todo.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'priority': todo.priority,
+            'deadline': todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo.deadline else '',
+            'category': todo.category or ''
+        })
+    
+    return JsonResponse({'todos': todos_list})
+
+@login_required
+@csrf_exempt
+def add_todo(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        deadline = None
+        if data.get('deadline'):
+            deadline = parse_datetime(data.get('deadline'))
+        
+        todo = TodoItem.objects.create(
+            user=request.user,
+            title=data.get('title'),
+            description=data.get('description'),
+            priority=data.get('priority'),
+            deadline=deadline,
+            category=data.get('category')
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'todo': {
+                'id': todo.id,
+                'title': todo.title,
+                'description': todo.description or '',
+                'createdAt': todo.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                'priority': todo.priority,
+                'deadline': todo.deadline.strftime('%Y-%m-%dT%H:%M') if todo.deadline else '',
+                'category': todo.category or ''
+            }
+        })
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@csrf_exempt
+def update_todo(request, todo_id):
+    if request.method == 'POST':
+        try:
+            todo = TodoItem.objects.get(id=todo_id, user=request.user)
+            data = json.loads(request.body)
+            
+            todo.title = data.get('title')
+            todo.description = data.get('description')
+            todo.priority = data.get('priority')
+            
+            if data.get('deadline'):
+                todo.deadline = parse_datetime(data.get('deadline'))
+            else:
+                todo.deadline = None
+                
+            todo.category = data.get('category')
+            todo.save()
+            
+            return JsonResponse({'success': True})
+            
+        except TodoItem.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Todo not found'})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+@csrf_exempt
+def delete_todo(request, todo_id):
+    if request.method == 'POST':
+        try:
+            todo = TodoItem.objects.get(id=todo_id, user=request.user)
+            todo.delete()
+            return JsonResponse({'success': True})
+        except TodoItem.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Todo not found'})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 
 
