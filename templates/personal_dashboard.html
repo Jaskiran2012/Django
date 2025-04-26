@@ -3,25 +3,44 @@
 {% block title %}Panda To-Do List{% endblock %}
 
 {% block content %}
-<div class="panda-banner">🐼🐾 Welcome to Tasks! 🐾🐼</div>
-<div class="container">
-  <div class="panda-icon">🐼</div>
-  <h1> To-Do List</h1>
-  <form id="taskForm">
-    {% csrf_token %}
-    <input type="hidden" id="editingId" value="">
-    <input type="text" id="title" placeholder="Task Title" required />
-    <textarea id="description" placeholder="Description"></textarea>
-    <select id="priority">
-      <option value="low">Low Priority</option>
-      <option value="medium">Medium Priority</option>
-      <option value="high">High Priority</option>
-    </select>
-    <input type="datetime-local" id="deadline" />
-    <input type="text" id="category" placeholder="Category" />
-    <button type="submit" id="submitBtn">Add Task</button>
-  </form>
-  <div id="tasks"></div>
+<div class="panda-banner">
+    <div class="banner-content">
+        <span class="panda-icon">🐼</span>
+        <h1>Welcome to Tasks!</h1>
+        <span class="panda-icon">🐼</span>
+    </div>
+</div>
+
+<div class="dashboard-container">
+    <div class="panda-icon floating">🐼</div>
+    <h2>To-Do List</h2>
+    <form id="taskForm" class="task-form">
+        {% csrf_token %}
+        <input type="hidden" id="editingId" value="">
+        <div class="form-group">
+            <input type="text" id="title" placeholder="Task Title" required />
+        </div>
+        <div class="form-group">
+            <textarea id="description" placeholder="Description"></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <select id="priority">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="datetime-local" id="deadline" />
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" id="category" placeholder="Category" />
+        </div>
+        <button type="submit" id="submitBtn" class="submit-btn">Add Task</button>
+    </form>
+    <div id="tasks" class="tasks-container"></div>
 </div>
 
 <script>
@@ -226,95 +245,190 @@
 </script>
 
 <style>
-  body {
-    font-family: 'Quicksand', sans-serif;
-    background: repeat center center fixed;
-    background-size: 200px;
-    color: #2d2d2d;
-    margin: 0;
-    padding: 2rem;
-  }
-  .container {
-    max-width: 600px;
-    margin: auto;
-    background: #fbeded;
-    border-radius: 25px;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    position: relative;
-    backdrop-filter: blur(10px);
-  }
-  h1 {
-    text-align: center;
-    color: #222;
-  }
-  h1::before {
-    content: "🐼 ";
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  input, textarea, select, button {
-    padding: 0.6rem;
-    border: 1px solid #c7bebe;
-    border-radius: 10px;
-    font-size: 1rem;
-  }
-  button {
-    background-color: #222;
-    color: rgb(228, 234, 215);
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-  }
-  button:hover {
-    background-color: #e86ef3;
-    transform: scale(1.05);
-  }
-  .task {
-    background: #cd30c8 no-repeat right bottom;
-    background-size: 60px;
-    border-radius: 20px;
-    margin-top: 1rem;
-    padding: 1rem;
-    padding-right: 80px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    position: relative;
-    transition: all 0.3s ease;
-    color: white;
-  }
-  .task:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(23, 22, 22, 0.1);
-  }
-  .task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-  }
-  .task-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-  }
-  .priority-low { color: lightgreen; }
-  .priority-medium { color: yellow; }
-  .priority-high { color: salmon; }
-  .panda-icon {
-    position: absolute;
-    top: -25px;
-    right: -25px;
-    font-size: 3rem;
-  }
-  .panda-banner {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.05) 0%, transparent 20%),
+            radial-gradient(circle at 90% 80%, rgba(46, 204, 113, 0.05) 0%, transparent 20%);
+        color: #2d2d2d;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    .dashboard-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .panda-banner {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+    }
+
+    .banner-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .banner-content h1 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .panda-icon {
+        font-size: 1.5rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .floating {
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        font-size: 3rem;
+        z-index: 1;
+    }
+
+    h2 {
+        text-align: center;
+        color: #2d2d2d;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        position: relative;
+    }
+
+    .task-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        outline: none;
+    }
+
+    .submit-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .tasks-container {
+        margin-top: 1.5rem;
+    }
+
+    .task {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        border-radius: 15px;
+        margin-top: 1rem;
+        padding: 1.2rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+        position: relative;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+    .task:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    }
+
+    .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .task-actions button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 8px;
+        padding: 0.4rem;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+    .task-actions button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+
+    .priority-low { color: #a8e6cf; }
+    .priority-medium { color: #ffd93d; }
+    .priority-high { color: #ff9a9a; }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .banner-content h1 {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 {% endblock %}

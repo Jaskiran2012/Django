@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,7 @@
                     <h4>👤 Personal</h4>
                     <p>Manage your personal tasks and projects</p>
                     <p>Create and track your individual tasks, set priorities and stay organized.</p>
-                    <a href="#" class="btn personal-btn">Open Personal Tasks</a>
+                    <a href="{% url 'personal_dashboard' %}" class="btn personal-btn">Open Personal Tasks</a>
                 </div>
                 <div class="workspace professional">
                     <h4>💼 Professional</h4>

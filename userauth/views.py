@@ -1,7 +1,7 @@
 # userauth/views.py
 from django.shortcuts import render, redirect,get_object_or_404
 from .forms import SignUpForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import EmployeeCreationForm,TicketCreationForm
 from django.db.models import Count
@@ -258,6 +258,20 @@ def delete_todo(request, todo_id):
             return JsonResponse({'success': False, 'error': 'Todo not found'})
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('choose_mode.html')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    
+    return render(request, 'login.html')
 
 
 

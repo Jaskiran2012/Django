@@ -3,15 +3,209 @@
 {% block title %}My Tasks{% endblock %}
 
 {% block content %}
+<style>
+    .back-link {
+        color: #6B7280;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .stats-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+        background: #F9FAFB;
+        height: 100%;
+    }
+
+    .stats-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .open-icon {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .progress-icon {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .resolved-icon {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .stats-label {
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    .stats-value {
+        font-size: 1.5rem;
+        color: #111827;
+    }
+
+    .search-box {
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .search-box:focus {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .ticket-card {
+        padding: 1.5rem;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        transition: all 0.2s;
+    }
+
+    .ticket-card:hover {
+        border-color: #4F46E5;
+        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
+    }
+
+    .ticket-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .ticket-description {
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    .ticket-meta {
+        font-size: 0.75rem;
+        color: #9CA3AF;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
+
+    .status-open {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .status-progress {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .status-hold {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .status-resolved {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .action-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+    }
+
+    .btn-primary {
+        background: #4F46E5;
+        border-color: #4F46E5;
+    }
+
+    .btn-primary:hover {
+        background: #4338CA;
+        border-color: #4338CA;
+    }
+
+    .btn-warning {
+        background: #4F46E5;
+        border-color: #4F46E5;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background: #4338CA;
+        border-color: #4338CA;
+        color: white;
+    }
+
+    .btn-success {
+        background: #4F46E5;
+        border-color: #4F46E5;
+    }
+
+    .btn-success:hover {
+        background: #4338CA;
+        border-color: #4338CA;
+    }
+
+    .user-info {
+        color: #6B7280;
+        font-size: 0.875rem;
+    }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        background: #F3F4F6;
+        border-radius: 50%;
+    }
+
+    .dropdown .btn-light {
+        border: 1px solid #E5E7EB;
+        color: #374151;
+    }
+
+    .dropdown .btn-light:hover {
+        border-color: #4F46E5;
+        color: #4F46E5;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+</style>
+
 <div class="d-flex align-items-center mb-4">
     <a href="{% url 'dashboard' %}" class="back-link me-3">
-        <i class="fas fa-arrow-left me-1"></i> Back
+        <i class="fas fa-arrow-left me-2"></i> Back
     </a>
     <h3 class="mb-0">My Tasks</h3>
     <div class="ms-auto d-flex align-items-center">
-        <span class="me-2">{{ user.username }} • User</span>
-        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-            <i class="fas fa-user"></i>
+        <span class="user-info me-2">{{ user.username }} • User</span>
+        <div class="user-avatar d-flex align-items-center justify-content-center">
+            <i class="fas fa-user text-muted"></i>
         </div>
     </div>
 </div>
@@ -27,8 +221,8 @@
                     <div class="stats-icon open-icon">
                         <i class="fas fa-clipboard-list"></i>
                     </div>
-                    <div class="stats-label text-muted">To Do</div>
-                    <div class="stats-value fw-bold mt-1">{{ to_do_count }}</div>
+                    <div class="stats-label">To Do</div>
+                    <div class="stats-value">{{ to_do_count }}</div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -36,8 +230,8 @@
                     <div class="stats-icon progress-icon">
                         <i class="fas fa-spinner"></i>
                     </div>
-                    <div class="stats-label text-muted">In Progress</div>
-                    <div class="stats-value fw-bold mt-1">{{ in_progress_count }}</div>
+                    <div class="stats-label">In Progress</div>
+                    <div class="stats-value">{{ in_progress_count }}</div>
                 </div>
             </div>
             <div class="col-md-4">
@@ -45,8 +239,8 @@
                     <div class="stats-icon resolved-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="stats-label text-muted">Completed</div>
-                    <div class="stats-value fw-bold mt-1">{{ completed_count }}</div>
+                    <div class="stats-label">Completed</div>
+                    <div class="stats-value">{{ completed_count }}</div>
                 </div>
             </div>
         </div>
@@ -85,12 +279,12 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h6 class="ticket-title">{{ ticket.title }}</h6>
-                            <p class="ticket-description text-muted mb-2">{{ ticket.description }}</p>
+                            <p class="ticket-description mb-2">{{ ticket.description }}</p>
                             <div class="ticket-meta">
                                 Created 1 minute ago • {{ ticket.ticket_number }}
                             </div>
                             <div>
-                                <span class="text-muted">Assigned</span>
+                                <span class="text-muted small">Assigned</span>
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-end">
@@ -99,20 +293,20 @@
                             </span>
                             
                             {% if ticket.status == 'open' %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'in_progress' %}" class="btn btn-sm btn-primary action-btn">
+                                <a href="{% url 'update_ticket_status' ticket.id 'in_progress' %}" class="btn btn-primary action-btn">
                                     <i class="fas fa-play me-1"></i> Start Task
                                 </a>
                             {% elif ticket.status == 'in_progress' %}
                                 <div>
-                                    <a href="{% url 'update_ticket_status' ticket.id 'on_hold' %}" class="btn btn-sm btn-warning action-btn me-2">
+                                    <a href="{% url 'update_ticket_status' ticket.id 'on_hold' %}" class="btn btn-warning action-btn me-2">
                                         <i class="fas fa-pause me-1"></i> Put On Hold
                                     </a>
-                                    <a href="{% url 'update_ticket_status' ticket.id 'resolved' %}" class="btn btn-sm btn-success action-btn">
+                                    <a href="{% url 'update_ticket_status' ticket.id 'resolved' %}" class="btn btn-success action-btn">
                                         <i class="fas fa-check me-1"></i> Mark Resolved
                                     </a>
                                 </div>
                             {% elif ticket.status == 'on_hold' %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'in_progress' %}" class="btn btn-sm btn-primary action-btn">
+                                <a href="{% url 'update_ticket_status' ticket.id 'in_progress' %}" class="btn btn-primary action-btn">
                                     <i class="fas fa-play me-1"></i> Resume Task
                                 </a>
                             {% endif %}
@@ -122,7 +316,9 @@
             {% endfor %}
         {% else %}
             <div class="text-center py-5">
-                <img src="https://via.placeholder.com/120" alt="No tickets" class="mb-3" style="opacity: 0.5;">
+                <div class="mb-3">
+                    <i class="fas fa-tasks fa-3x text-muted"></i>
+                </div>
                 <h5>No tasks assigned to you yet</h5>
                 <p class="text-muted">Tasks assigned to you will appear here</p>
             </div>
