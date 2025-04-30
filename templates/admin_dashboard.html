@@ -3,15 +3,265 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
+<style>
+    body {
+        background-color: #F9FAFB;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 2rem;
+    }
+
+    .back-link {
+        color: #6B7280;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+
+    .card-body {
+        padding: 1.5rem 2rem;
+    }
+
+    .stats-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+        background: white;
+        height: 100%;
+        transition: all 0.2s;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .stats-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .open-icon {
+        background: rgba(234, 179, 8, 0.1);
+        color: #B45309;
+    }
+
+    .progress-icon {
+        background: rgba(59, 130, 246, 0.1);
+        color: #1D4ED8;
+    }
+
+    .resolved-icon {
+        background: rgba(34, 197, 94, 0.1);
+        color: #15803D;
+    }
+
+    .closed-icon {
+        background: rgba(107, 114, 128, 0.1);
+        color: #374151;
+    }
+
+    .stats-label {
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    .stats-value {
+        font-size: 1.5rem;
+        color: #111827;
+        font-weight: 600;
+    }
+
+    .search-box {
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        width: 400px;
+    }
+
+    .search-box:focus {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .ticket-card {
+        padding: 1.5rem;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        transition: all 0.2s;
+    }
+
+    .ticket-card:hover {
+        border-color: #D1D5DB;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .ticket-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .ticket-description {
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    .ticket-meta {
+        font-size: 0.75rem;
+        color: #9CA3AF;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+    }
+
+    .status-open {
+        background: rgba(234, 179, 8, 0.1);
+        color: #B45309;
+    }
+
+    .status-progress {
+        background: rgba(59, 130, 246, 0.1);
+        color: #1D4ED8;
+    }
+
+    .status-hold {
+        background: rgba(107, 114, 128, 0.1);
+        color: #4B5563;
+    }
+
+    .status-resolved {
+        background: rgba(34, 197, 94, 0.1);
+        color: #15803D;
+    }
+
+    .status-closed {
+        background: rgba(107, 114, 128, 0.1);
+        color: #374151;
+    }
+
+    .action-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+    }
+
+    .create-btn {
+        background: #4F46E5;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .create-btn:hover {
+        background: #4338CA;
+        color: white;
+        transform: translateY(-1px);
+        text-decoration: none;
+    }
+
+    .dropdown .btn-light {
+        border: 1px solid #E5E7EB;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+
+    .dropdown .btn-light:hover {
+        border-color: #4F46E5;
+        color: #4F46E5;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .user-info {
+        color: #6B7280;
+        font-size: 0.875rem;
+    }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        background: #F3F4F6;
+        border-radius: 50%;
+    }
+
+    h4 {
+        color: #111827;
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #6B7280 !important;
+    }
+
+    .input-group-text {
+        border-color: #E5E7EB;
+    }
+
+    .btn-outline-secondary {
+        border-color: #E5E7EB;
+        color: #4B5563;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #F3F4F6;
+        border-color: #D1D5DB;
+        color: #374151;
+    }
+
+    .btn-outline-primary {
+        border-color: #4F46E5;
+        color: #4F46E5;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: rgba(79, 70, 229, 0.1);
+        border-color: #4F46E5;
+        color: #4338CA;
+    }
+</style>
+
 <div class="d-flex align-items-center mb-4">
     <a href="{% url 'dashboard' %}" class="back-link me-3">
-        <i class="fas fa-arrow-left me-1"></i> Back
+        <i class="fas fa-arrow-left me-2"></i> Back
     </a>
     <h3 class="mb-0">Admin Dashboard</h3>
     <div class="ms-auto d-flex align-items-center">
-        <span class="me-2">Admin • {{ user.username }}</span>
-        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
-            <i class="fas fa-user"></i>
+        <span class="user-info me-2">Admin • {{ user.username }}</span>
+        <div class="user-avatar d-flex align-items-center justify-content-center">
+            <i class="fas fa-user text-muted"></i>
         </div>
     </div>
 </div>
@@ -23,9 +273,7 @@
                 <h4 class="mb-1">Project Management</h4>
                 <p class="text-muted mb-0">Monitor and manage all tasks across your organization</p>
             </div>
-            <a href="{% url 'create_ticket' %}" class="btn create-btn">
-                <i class="fas fa-plus me-2"></i> Create New Ticket
-            </a>
+            <a href="{% url 'create_ticket' %}" class="btn create-btn">Create New Ticket</a>
         </div>
         
         <div class="row mt-4">
@@ -34,8 +282,8 @@
                     <div class="stats-icon open-icon">
                         <i class="fas fa-clipboard-list"></i>
                     </div>
-                    <div class="stats-label text-muted">Open</div>
-                    <div class="stats-value fw-bold mt-1">{{ open_count }}</div>
+                    <div class="stats-label">Open</div>
+                    <div class="stats-value">{{ open_count }}</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -43,8 +291,8 @@
                     <div class="stats-icon progress-icon">
                         <i class="fas fa-spinner"></i>
                     </div>
-                    <div class="stats-label text-muted">In Progress</div>
-                    <div class="stats-value fw-bold mt-1">{{ in_progress_count }}</div>
+                    <div class="stats-label">In Progress</div>
+                    <div class="stats-value">{{ in_progress_count }}</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -52,8 +300,8 @@
                     <div class="stats-icon resolved-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="stats-label text-muted">Resolved</div>
-                    <div class="stats-value fw-bold mt-1">{{ resolved_count }}</div>
+                    <div class="stats-label">Resolved</div>
+                    <div class="stats-value">{{ resolved_count }}</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -61,8 +309,8 @@
                     <div class="stats-icon closed-icon">
                         <i class="fas fa-archive"></i>
                     </div>
-                    <div class="stats-label text-muted">Closed</div>
-                    <div class="stats-value fw-bold mt-1">{{ closed_count }}</div>
+                    <div class="stats-label">Closed</div>
+                    <div class="stats-value">{{ closed_count }}</div>
                 </div>
             </div>
         </div>
@@ -72,7 +320,7 @@
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="input-group" style="max-width: 400px;">
+            <div class="input-group" style="width: 400px;">
                 <span class="input-group-text bg-white border-end-0">
                     <i class="fas fa-search text-muted"></i>
                 </span>
@@ -99,12 +347,12 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h6 class="ticket-title">{{ ticket.title }}</h6>
-                            <p class="ticket-description text-muted mb-2">{{ ticket.description }}</p>
+                            <p class="ticket-description mb-2">{{ ticket.description }}</p>
                             <div class="ticket-meta">
                                 Created less than a minute ago • {{ ticket.ticket_number }}
                             </div>
                             <div>
-                                <span class="text-muted">Assigned: 
+                                <span class="text-muted small">Assigned: 
                                     {% if ticket.assigned_to %}
                                         {{ ticket.assigned_to.username }}
                                     {% else %}
@@ -119,11 +367,11 @@
                             </span>
                             
                             {% if ticket.status != 'closed' %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'closed' %}" class="btn btn-sm btn-outline-secondary action-btn">
+                                <a href="{% url 'update_ticket_status' ticket.id 'closed' %}" class="btn btn-outline-secondary action-btn">
                                     <i class="fas fa-times me-1"></i> Close Task
                                 </a>
                             {% else %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'open' %}" class="btn btn-sm btn-outline-primary action-btn">
+                                <a href="{% url 'update_ticket_status' ticket.id 'open' %}" class="btn btn-outline-primary action-btn">
                                     <i class="fas fa-redo me-1"></i> Reopen Task
                                 </a>
                             {% endif %}
@@ -133,12 +381,12 @@
             {% endfor %}
         {% else %}
             <div class="text-center py-5">
-                <img src="https://via.placeholder.com/120" alt="No tickets" class="mb-3" style="opacity: 0.5;">
+                <div class="mb-3">
+                    <i class="fas fa-tasks fa-3x text-muted"></i>
+                </div>
                 <h5>No tickets found</h5>
                 <p class="text-muted">Get started by creating your first ticket</p>
-                <a href="{% url 'create_ticket' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> Create Your First Ticket
-                </a>
+                <a href="{% url 'create_ticket' %}" class="create-btn">Create Your First Ticket</a>
             </div>
         {% endif %}
     </div>
