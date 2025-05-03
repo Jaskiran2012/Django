@@ -1,11 +1,12 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-
+from django.urls import include, path
 
     
 
 urlpatterns = [
+    path('quickstart/', include('quickstart.urls')),
     path('signup/', views.signup_view, name='signup'),
     path('add-employee/', views.add_employee_view, name='add_employee'),
     path('choose-mode/', views.choose_mode_view, name='choose-mode'),
