@@ -267,7 +267,7 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            return redirect('choose_mode.html')
+            return redirect('choose-mode')  # Use the name of the URL pattern
         else:
             messages.error(request, 'Invalid username or password.')
     
