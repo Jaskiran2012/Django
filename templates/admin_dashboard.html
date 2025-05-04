@@ -254,7 +254,7 @@
 </style>
 
 <div class="d-flex align-items-center mb-4">
-    <a href="{% url 'dashboard' %}" class="back-link me-3">
+    <a href="{% url 'choose-role' %}" class="back-link me-3">
         <i class="fas fa-arrow-left me-2"></i> Back
     </a>
     <h3 class="mb-0">Admin Dashboard</h3>
@@ -266,6 +266,7 @@
     </div>
 </div>
 
+
 <div class="card mb-4">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -273,7 +274,11 @@
                 <h4 class="mb-1">Project Management</h4>
                 <p class="text-muted mb-0">Monitor and manage all tasks across your organization</p>
             </div>
-            <a href="{% url 'create_ticket' %}" class="btn create-btn">Create New Ticket</a>
+            <div class="d-flex flex-column"> <!-- Flex container for vertical alignment -->
+                <a href="{% url 'create_ticket' %}" class="btn create-btn mb-2">Create New Ticket</a>
+                <a href="{% url 'add_employee' %}" class="btn create-btn">Add Employee</a>
+            </div>
+            
         </div>
         
         <div class="row mt-4">
@@ -320,23 +325,27 @@
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="input-group" style="width: 400px;">
-                <span class="input-group-text bg-white border-end-0">
-                    <i class="fas fa-search text-muted"></i>
-                </span>
-                <input type="text" class="form-control border-start-0 search-box" placeholder="Search tickets by title, description or ticket number...">
-            </div>
+            <form method="get" class="d-flex align-items-center" style="width: 400px;">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0 search-box" 
+                           placeholder="Search tickets by title, description or ticket number..."
+                           value="{{ search_query }}">
+                </div>
+            </form>
             
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" id="statusFilter" data-bs-toggle="dropdown">
-                    All Statuses
+                    {% if status_filter == 'all' or not status_filter %}All Statuses{% else %}{{ status_filter|title }}{% endif %}
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">All Statuses</a></li>
-                    <li><a class="dropdown-item" href="#">Open</a></li>
-                    <li><a class="dropdown-item" href="#">In Progress</a></li>
-                    <li><a class="dropdown-item" href="#">Resolved</a></li>
-                    <li><a class="dropdown-item" href="#">Closed</a></li>
+                    <li><a class="dropdown-item" href="?{% if search_query %}search={{ search_query }}&{% endif %}status=all">All Statuses</a></li>
+                    <li><a class="dropdown-item" href="?{% if search_query %}search={{ search_query }}&{% endif %}status=open">Open</a></li>
+                    <li><a class="dropdown-item" href="?{% if search_query %}search={{ search_query }}&{% endif %}status=in_progress">In Progress</a></li>
+                    <li><a class="dropdown-item" href="?{% if search_query %}search={{ search_query }}&{% endif %}status=resolved">Resolved</a></li>
+                    <li><a class="dropdown-item" href="?{% if search_query %}search={{ search_query }}&{% endif %}status=closed">Closed</a></li>
                 </ul>
             </div>
         </div>
@@ -366,15 +375,21 @@
                                 {{ ticket.get_status_display }}
                             </span>
                             
-                            {% if ticket.status != 'closed' %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'closed' %}" class="btn btn-outline-secondary action-btn">
-                                    <i class="fas fa-times me-1"></i> Close Task
+                            <div class="d-flex flex-column align-items-end">
+                                <a href="{% url 'reassign_ticket' ticket.id %}" class="btn btn-outline-primary action-btn mb-2">
+                                    <i class="fas fa-user-edit me-1"></i> Reassign
                                 </a>
-                            {% else %}
-                                <a href="{% url 'update_ticket_status' ticket.id 'open' %}" class="btn btn-outline-primary action-btn">
-                                    <i class="fas fa-redo me-1"></i> Reopen Task
-                                </a>
-                            {% endif %}
+                                
+                                {% if ticket.status != 'closed' %}
+                                    <a href="{% url 'update_ticket_status' ticket.id 'closed' %}" class="btn btn-outline-secondary action-btn">
+                                        <i class="fas fa-times me-1"></i> Close Task
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'update_ticket_status' ticket.id 'open' %}" class="btn btn-outline-primary action-btn">
+                                        <i class="fas fa-redo me-1"></i> Reopen Task
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

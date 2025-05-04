@@ -57,8 +57,8 @@ ROOT_URLCONF = 'flasktoDjango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Global templates directory
+        'APP_DIRS': True,  # Enables app-specific templates
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
